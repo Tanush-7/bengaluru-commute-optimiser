@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:,">
+<title>Bengaluru Commute Optimiser — Auto vs Cab vs Metro — tanush.tech</title>
+<meta name="description" content="Compare auto, cab and Namma Metro plus last-mile on cost and time for your exact Bengaluru commute.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4F5F1;--card:#FFFFFF;--card2:#EEF2EE;--ink:#13201B;--muted:#5B6B64;--line:#DDE3DE;--teal:#0E7569;--teal-dark:#0A5C54;--amber-bg:#FEF3C7;--red:#B91C1C;--green:#15803D;--radius:18px}
+@media (prefers-color-scheme: dark){:root{--bg:#0E1512;--card:#17211D;--card2:#1E2B26;--ink:#E8EFEA;--muted:#9AAEA4;--line:#2A3A33;--amber-bg:#2A2110}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Manrope,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.5}
+.wrap{max-width:1180px;margin:0 auto;padding:20px 18px 44px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--teal)}
+h1{font-size:clamp(28px,5vw,46px);line-height:1.05;margin:10px 0 10px;letter-spacing:-.03em;max-width:780px}h1 span{color:var(--teal)}
+.sub{font-size:17px;color:var(--muted);max-width:740px;margin:0}
+.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;margin-top:18px;align-items:start}@media(max-width:860px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px}.card h2{margin:0 0 4px;font-size:18px;letter-spacing:-.02em}.card p.help{margin:0 0 8px;color:var(--muted);font-size:14px}
+label{font-size:13px;font-weight:700;display:block;margin:16px 0 7px}select,input[type=number]{width:100%;padding:12px 13px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:15px;font-family:inherit}select:focus,input:focus{outline:2px solid var(--teal);outline-offset:1px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:520px){.row2{grid-template-columns:1fr}}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}@media(max-width:520px){.row3{grid-template-columns:1fr}}
+.seg{display:flex;gap:8px}.seg button{flex:1;padding:11px 8px;border-radius:12px;border:1px solid var(--line);background:var(--card2);font-weight:800;cursor:pointer;font-family:inherit}.seg button.active{background:var(--teal);color:#fff;border-color:var(--teal)}
+.rangeRow{display:flex;align-items:center;gap:12px}input[type=range]{flex:1;accent-color:var(--teal)}
+.badge{font-family:"IBM Plex Mono",monospace;font-weight:600;background:var(--card2);border:1px solid var(--line);padding:6px 10px;border-radius:999px;font-size:13px;white-space:nowrap}
+.note{font-size:12.5px;color:var(--muted);margin-top:7px;line-height:1.45}.note b{color:var(--ink)}
+.verdict{position:sticky;top:14px}@media(max-width:860px){.verdict{position:static}}
+.verdictTop{background:var(--teal);color:#fff;border-radius:18px;padding:22px}.verdictTop small{letter-spacing:.1em;text-transform:uppercase;font-weight:800;font-size:11px;opacity:.9}
+.big{font-family:"IBM Plex Mono",monospace;font-size:clamp(30px,5vw,42px);line-height:1;font-weight:600;letter-spacing:-.04em;margin:8px 0 4px}.bigSub{opacity:.92;font-size:14px}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}.kpi{background:var(--card2);border-radius:14px;padding:13px}.kpi b{font-family:"IBM Plex Mono",monospace;font-size:18px;display:block;line-height:1.1}.kpi span{font-size:12.5px;color:var(--muted)}
+.insight{margin-top:14px;border-radius:14px;padding:14px;font-size:14px}.insight.warn{background:var(--amber-bg);border:1px solid #F59E0B55}.insight.good{background:#DCFCE755;border:1px solid #22C55E55}
+.tmodes{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:10px}.tmodes th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);padding:7px 8px;border-bottom:1px solid var(--line)}.tmodes td{padding:8px;border-bottom:1px solid var(--line)}.tmodes tr.best td{background:color-mix(in srgb,var(--teal) 9%,transparent);font-weight:700}
+.win{font-size:10.5px;font-weight:800;letter-spacing:.06em;padding:2px 7px;border-radius:999px;background:#DCFCE7;color:#15803D;margin-left:6px;white-space:nowrap}
+@media (prefers-color-scheme: dark){.win{background:#0F2418;color:#86EFAC}}
+.section{margin-top:22px}.section h2{font-size:22px;letter-spacing:-.02em;margin:0 0 6px}.section>p{color:var(--muted);margin:0 0 14px;max-width:780px}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}@media(max-width:800px){.how{grid-template-columns:1fr}}.how div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}.how h3{margin:0 0 6px;font-size:15px}.how p{margin:0;font-size:14px;color:var(--muted)}
+.badgesRow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.foot{margin-top:26px;font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}.foot a{color:var(--teal)}
+.basis{margin-top:12px;font-size:13px;background:var(--card2);border-radius:12px;padding:12px;line-height:1.55}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">tanush.tech · Bengaluru renting tools</div>
+  <h1>Auto, cab or metro — <span>for your exact route.</span></h1>
+  <p class="sub">Pick where you live and where you work. Compares auto, cab and Namma Metro plus last-mile on monthly cost and hours, at peak and off-peak.</p>
+  <div class="badgesRow"><span class="badge">Estimates from typical speeds and official/editable fares — not live traffic or live cab quotes</span><span class="badge">Entries stay in this browser tab — nothing is uploaded</span></div>
+
+  <div class="grid">
+    <div>
+      <div class="card">
+        <h2>Your route</h2>
+        <p class="help">Distance auto-fills from the area pair (straight-line × 1.35 for road). Replace it with the real distance from your map app for an exact answer.</p>
+        <div class="row2">
+          <div>
+            <label for="area">I travel from</label>
+            <select id="area"></select>
+          </div>
+          <div>
+            <label for="office">to</label>
+            <select id="office"></select>
+          </div>
+        </div>
+        <div class="row2">
+          <div>
+            <label for="km">One-way road distance (km)</label>
+            <input type="number" id="km" step="0.5" min="0.5">
+          </div>
+          <div>
+            <label for="days">Office days per week</label>
+            <div class="rangeRow"><input type="range" id="days" min="1" max="6" value="3"><span class="badge" id="daysLabel">3 days</span></div>
+          </div>
+        </div>
+        <label>When do you usually travel?</label>
+        <div class="seg"><button id="peak" class="active" type="button">Peak hours</button><button id="offpeak" type="button">Off-peak</button></div>
+        <p class="note">Peak assumes slower road speeds (auto 18 km/h, cab 16 km/h). Off-peak: auto 24, cab 22. Metro time barely changes.</p>
+      </div>
+
+      <div class="card" style="margin-top:18px">
+        <h2>Fare settings — all editable</h2>
+        <p class="help">Defaults: auto at the official RTA meter (₹36 first 2 km, ₹18/km after). Cab is an estimate — app quotes vary with demand.</p>
+        <div class="row3">
+          <div><label for="autoBase">Auto base (₹, first 2 km)</label><input type="number" id="autoBase" value="36" min="0"></div>
+          <div><label for="autoKm">Auto ₹/km after 2 km</label><input type="number" id="autoKm" value="18" min="0"></div>
+          <div><label for="autoTip">App booking premium (₹/trip)</label><input type="number" id="autoTip" value="0" min="0"></div>
+        </div>
+        <div class="row3">
+          <div><label for="cabBase">Cab base (₹)</label><input type="number" id="cabBase" value="70" min="0"></div>
+          <div><label for="cabKm">Cab ₹/km</label><input type="number" id="cabKm" value="18" min="0"></div>
+          <div><label for="surge">Surge multiplier</label><select id="surge"><option value="1" selected>1.0× normal</option><option value="1.25">1.25× busy</option><option value="1.5">1.5× peak/rain</option></select></div>
+        </div>
+        <label for="metroFrom">Metro: from station</label>
+        <select id="metroFrom"></select>
+        <label for="metroTo">to station</label>
+        <select id="metroTo"></select>
+        <div class="row3">
+          <div><label for="metroFare">Metro fare one-way (₹) — pre-filled estimate, replace with your real fare</label><input type="number" id="metroFare" min="0"></div>
+          <div><label for="lastMile">Last-mile each end (₹)</label><input type="number" id="lastMile" value="45" min="0"></div>
+          <div><label for="lastMileMin">Last-mile mins each end</label><input type="number" id="lastMileMin" value="12" min="0"></div>
+        </div>
+        <p class="note" id="metroNote"></p>
+      </div>
+    </div>
+
+    <div class="verdict">
+      <div class="verdictTop">
+        <small>Cheapest monthly commute on this route</small>
+        <div class="big" id="bestCost">—</div>
+        <div class="bigSub" id="bestCostSub">—</div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h2>All three, side by side</h2>
+        <table class="tmodes">
+          <thead><tr><th>Mode</th><th>One-way</th><th>One-way time</th><th>Monthly cost</th><th>Monthly hours</th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+        <div class="insight good" id="verdictBox"></div>
+        <div class="basis" id="basisBox"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Honest limits</h2>
+    <p>What this tool does not know.</p>
+    <div class="how">
+      <div><h3>Not live data</h3><p>Times come from typical peak and off-peak speeds, not live traffic. Cab fares are a modelled estimate — the app quote on the day can be higher or lower, and surge changes everything.</p></div>
+      <div><h3>Metro coverage</h3><p>The picker covers the operational Purple and Green lines, routed via Majestic; rail distances and the fare that comes from them are approximate until you overwrite the fare field. The Yellow line (RV Road–Bommasandra, for Electronic City) opened in 2025 and is not in the picker yet — enter your fare manually if you use it. Metro only wins if both ends are genuinely near a station.</p></div>
+      <div><h3>Fare sources</h3><p>Auto: RTA meter fixed July 2025 (₹36 first 2 km, ₹18/km), still the official rate as of Nov 2026 — app autos charge a premium over it. Metro: distance-slab estimate (₹10–₹90, unofficial chart; BMRCL confirms a 5% smart-card discount but publishes no English slab table) — editable, so use your real fare.</p></div>
+    </div>
+  </div>
+
+  <div class="foot">
+    Auto fare: Bengaluru RTA notification, July 2025 (unchanged as of Nov 2026; a union demand to raise it is pending). Metro slabs: unofficial distance chart — confirm in the Namma Metro app. More tools: <a href="https://tanush.tech">tanush.tech</a> · Nov 2026
+  </div>
+</div>
+<script>
+const AREAS=[
+{id:'indiranagar',name:'Indiranagar',lat:12.9784,lng:77.6408,rents:{1:22000,2:38000,3:58000},maint:4000,rentType:'guide',metro:'indiranagar',tanker:false},
+{id:'koramangala',name:'Koramangala',lat:12.9352,lng:77.6245,rents:{1:20000,2:35000,3:52000},maint:3800,rentType:'guide',metro:'mgroad',tanker:false},
+{id:'hsr',name:'HSR Layout',lat:12.9116,lng:77.6389,rents:{1:18000,2:32000,3:48000},maint:3500,rentType:'guide',metro:'jayanagar',tanker:false},
+{id:'whitefield',name:'Whitefield',lat:12.9698,lng:77.7500,rents:{1:16000,2:28000,3:42000},maint:4500,rentType:'guide',metro:'whitefield',tanker:true},
+{id:'bellandur',name:'Bellandur',lat:12.9257,lng:77.6810,rents:{1:17000,2:30000,3:45000},maint:4200,rentType:'guide',metro:'krpuram',tanker:true},
+{id:'marathahalli',name:'Marathahalli',lat:12.9569,lng:77.7011,rents:{1:15000,2:26000,3:38000},maint:3200,rentType:'estimate',metro:'hoodi',tanker:true},
+{id:'jpnagar',name:'JP Nagar',lat:12.9063,lng:77.5857,rents:{1:15000,2:26000,3:40000},maint:3000,rentType:'estimate',metro:'jpnagar-stn',tanker:false},
+{id:'btm',name:'BTM Layout',lat:12.9166,lng:77.6101,rents:{1:14000,2:24000,3:36000},maint:2800,rentType:'estimate',metro:'jayanagar',tanker:false},
+{id:'hebbal',name:'Hebbal',lat:13.0451,lng:77.5926,rents:{1:16000,2:28000,3:43000},maint:3600,rentType:'guide',metro:'yeshwanthpur',tanker:false},
+{id:'yelahanka',name:'Yelahanka',lat:13.1007,lng:77.5963,rents:{1:11000,2:19000,3:28000},maint:2400,rentType:'estimate',metro:'peenya',tanker:false},
+{id:'sarjapur',name:'Sarjapur Road',lat:12.9100,lng:77.6800,rents:{1:16000,2:29000,3:44000},maint:4000,rentType:'estimate',metro:'hoodi',tanker:true},
+{id:'electroniccity',name:'Electronic City',lat:12.8399,lng:77.6770,rents:{1:12000,2:21000,3:32000},maint:3000,rentType:'estimate',metro:'silkinstitute',tanker:false},
+{id:'malleshwaram',name:'Malleshwaram',lat:13.0035,lng:77.5648,rents:{1:17000,2:30000,3:46000},maint:3200,rentType:'guide',metro:'sampige',tanker:false},
+{id:'banashankari',name:'Banashankari',lat:12.9155,lng:77.5736,rents:{1:13000,2:23000,3:35000},maint:2600,rentType:'estimate',metro:'banashankari-stn',tanker:false},
+{id:'krpuram',name:'KR Puram',lat:12.9950,lng:77.6780,rents:{1:13000,2:22000,3:34000},maint:2800,rentType:'estimate',metro:'krpuram',tanker:false},
+{id:'rrnagar',name:'RR Nagar',lat:12.9230,lng:77.5190,rents:{1:12000,2:21000,3:32000},maint:2500,rentType:'estimate',metro:'rrnagar-stn',tanker:false},
+];
+const OFFICES=[
+{id:'whitefield',name:'Whitefield — ITPL / EPIP',lat:12.9850,lng:77.7370,metro:'pattandur'},
+{id:'bellandur',name:'Bellandur — Outer Ring Road (ORR)',lat:12.9257,lng:77.6810,metro:'krpuram'},
+{id:'koramangala',name:'Koramangala / Inner Ring Road',lat:12.9352,lng:77.6245,metro:'mgroad'},
+{id:'mgroad',name:'MG Road / CBD',lat:12.9750,lng:77.6060,metro:'mgroad'},
+{id:'manyata',name:'Hebbal — Manyata Tech Park',lat:13.0560,lng:77.5920,metro:'yeshwanthpur'},
+{id:'electroniccity',name:'Electronic City',lat:12.8399,lng:77.6770,metro:'silkinstitute'},
+{id:'sarjapur',name:'Sarjapur / Wipro / RGA',lat:12.8850,lng:77.7000,metro:'hoodi'},
+{id:'indiranagar',name:'Indiranagar / Domlur / EGL',lat:12.9620,lng:77.6380,metro:'indiranagar'},
+];
+// Namma Metro stations: km = approx distance along line from terminus. Majestic is the interchange.
+const STATIONS=[
+ // Purple Line — from Whitefield (Kadugodi)
+ {id:'whitefield',name:'Whitefield (Kadugodi)',line:'Purple',km:0},{id:'hopefarm',name:'Hope Farm Channasandra',line:'Purple',km:1.9},{id:'pattandur',name:'Pattandur Agrahara (ITPL)',line:'Purple',km:3.5},{id:'sathyasai',name:'Sri Sathya Sai Hospital',line:'Purple',km:4.6},{id:'nallurahalli',name:'Nallurahalli',line:'Purple',km:5.8},{id:'kundalahalli',name:'Kundalahalli',line:'Purple',km:7.2},{id:'seetharamapalya',name:'Seetharamapalya',line:'Purple',km:8.4},{id:'hoodi',name:'Hoodi',line:'Purple',km:9.5},{id:'garudacharpalya',name:'Garudacharapalya',line:'Purple',km:10.8},{id:'singayyanapalya',name:'Singayyanapalya',line:'Purple',km:12.2},{id:'krpuram',name:'Krishnarajapura (KR Puram)',line:'Purple',km:13.5},{id:'baiyappanahalli',name:'Baiyappanahalli',line:'Purple',km:16.5},{id:'svroad',name:'Swami Vivekananda Road',line:'Purple',km:17.8},{id:'indiranagar',name:'Indiranagar',line:'Purple',km:18.9},{id:'halasuru',name:'Halasuru',line:'Purple',km:20.1},{id:'trinity',name:'Trinity',line:'Purple',km:21.2},{id:'mgroad',name:'MG Road',line:'Purple',km:22.2},{id:'cubbon',name:'Cubbon Park',line:'Purple',km:23.1},{id:'vidhana',name:'Dr. B.R. Ambedkar Stn, Vidhana Soudha',line:'Purple',km:23.9},{id:'visvesvaraya',name:'Sir M. Visvesvaraya Stn, Central College',line:'Purple',km:24.8},{id:'majestic-p',name:'Nadaprabhu Kempegowda Stn, Majestic',line:'Purple',km:25.7},{id:'cityrail',name:'City Railway Station',line:'Purple',km:26.6},{id:'magadi',name:'Magadi Road',line:'Purple',km:27.9},{id:'hosahalli',name:'Hosahalli',line:'Purple',km:29.3},{id:'vijayanagar',name:'Vijayanagar',line:'Purple',km:30.4},{id:'attiguppe',name:'Attiguppe',line:'Purple',km:31.6},{id:'deepanjali',name:'Deepanjali Nagar',line:'Purple',km:32.9},{id:'mysururoad',name:'Mysuru Road',line:'Purple',km:34.3},{id:'nayandahalli',name:'Nayandahalli',line:'Purple',km:35.7},{id:'rrnagar-stn',name:'Rajarajeshwari Nagar',line:'Purple',km:37.1},{id:'jnanabharathi',name:'Jnanabharathi',line:'Purple',km:38.7},{id:'pattanagere',name:'Pattanagere',line:'Purple',km:40.2},{id:'kengeri-bus',name:'Kengeri Bus Terminal',line:'Purple',km:41.6},{id:'kengeri',name:'Kengeri',line:'Purple',km:42.6},{id:'challaghatta',name:'Challaghatta',line:'Purple',km:44.0},
+ // Green Line — from Madavara
+ {id:'madavara',name:'Madavara',line:'Green',km:0},{id:'chikkabanavara',name:'Chikkabanavara',line:'Green',km:2.2},{id:'manjunath',name:'Manjunath Nagar',line:'Green',km:3.6},{id:'dasarahalli',name:'Dasarahalli',line:'Green',km:5.5},{id:'jalahalli',name:'Jalahalli',line:'Green',km:6.8},{id:'peenya-ind',name:'Peenya Industry',line:'Green',km:8.0},{id:'peenya',name:'Peenya',line:'Green',km:9.0},{id:'goraguntepalya',name:'Goraguntepalya',line:'Green',km:10.2},{id:'yeshwanthpur',name:'Yeshwanthpur',line:'Green',km:11.4},{id:'sandal',name:'Sandal Soap Factory',line:'Green',km:12.7},{id:'mahalakshmi',name:'Mahalakshmi',line:'Green',km:13.8},{id:'rajajinagar',name:'Rajajinagar',line:'Green',km:15.0},{id:'kuvempu',name:'Kuvempu Road',line:'Green',km:16.1},{id:'srirampura',name:'Srirampura',line:'Green',km:17.2},{id:'sampige',name:'Sampige Road',line:'Green',km:18.3},{id:'majestic-g',name:'Nadaprabhu Kempegowda Stn, Majestic',line:'Green',km:19.4},{id:'chickpete',name:'Chickpete',line:'Green',km:20.3},{id:'krmarket',name:'Krishna Rajendra Market',line:'Green',km:21.2},{id:'national',name:'National College',line:'Green',km:22.4},{id:'lalbagh',name:'Lalbagh',line:'Green',km:23.5},{id:'southend',name:'South End Circle',line:'Green',km:24.5},{id:'jayanagar',name:'Jayanagar',line:'Green',km:25.6},{id:'rvroad',name:'Rashtreeya Vidyalaya Road',line:'Green',km:26.9},{id:'banashankari-stn',name:'Banashankari',line:'Green',km:28.1},{id:'jpnagar-stn',name:'Jaya Prakash Nagar (JP Nagar)',line:'Green',km:29.3},{id:'yelachenahalli',name:'Yelachenahalli',line:'Green',km:30.7},{id:'konanakunte',name:'Konanakunte Cross',line:'Green',km:32.0},{id:'doddakallasandra',name:'Doddakallasandra',line:'Green',km:33.2},{id:'vajarahalli',name:'Vajarahalli',line:'Green',km:34.4},{id:'thalaghattapura',name:'Thalaghattapura',line:'Green',km:35.7},{id:'silkinstitute',name:'Silk Institute',line:'Green',km:37.0},
+];
+const MODES=[
+{id:'metro',name:'Namma Metro',desc:'Fare from station picker below. Time steady even in peak.',speed:32,accessMin:12},
+{id:'bus',name:'BMTC Bus',desc:'Pass or per-trip — choose the basis below. Slowest in peak.',speed:14,accessMin:8},
+{id:'bike',name:'Own Bike / Scooter',desc:'Fuel + wear ~₹5/km. Fastest door-to-door under 10 km.',speed:22,accessMin:3},
+{id:'car',name:'Own Car',desc:'Fuel + wear ~₹12/km. Parking extra if office charges.',speed:16,accessMin:5},
+{id:'auto',name:'Auto',desc:'₹30 + ₹15/km. Good under 7 km.',speed:18,accessMin:4},
+{id:'cab',name:'Cab (Ola / Uber)',desc:'₹70 + ₹18/km. Surge extra in peak / rain.',speed:16,accessMin:6},
+{id:'shuttle',name:'Company Shuttle',desc:'₹2,500/mo pass estimate if charged.',speed:18,accessMin:10},
+];
+function hav(a,b){const R=6371,dLat=(b.lat-a.lat)*Math.PI/180,dLng=(b.lng-a.lng)*Math.PI/180;const x=Math.sin(dLat/2)**2+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLng/2)**2;return 2*R*Math.asin(Math.sqrt(x))}
+function roadKm(area,office){return Math.max(1,Math.round(hav(area,office)*1.35*10)/10)}
+function stationById(id){return STATIONS.find(s=>s.id===id)}
+function railKm(fromId,toId){
+  const a=stationById(fromId),b=stationById(toId); if(!a||!b) return 0;
+  if(a.line===b.line) return Math.round(Math.abs(a.km-b.km)*10)/10;
+  const majA=stationById(a.line==='Purple'?'majestic-p':'majestic-g'), majB=stationById(b.line==='Purple'?'majestic-p':'majestic-g');
+  return Math.round((Math.abs(a.km-majA.km)+Math.abs(b.km-majB.km))*10)/10;
+}
+function slabFare(km){if(km<=0)return 10;if(km<=2)return 10;if(km<=4)return 20;if(km<=6)return 30;if(km<=8)return 40;if(km<=10)return 50;if(km<=12)return 60;if(km<=16)return 70;if(km<=20)return 80;return 90}
+
+let peak=true;
+const $=id=>document.getElementById(id);
+const fmt=n=>'₹'+Math.round(n).toLocaleString('en-IN');
+function fillSelects(){
+  $('area').innerHTML=AREAS.map(a=>`<option value="${a.id}">${a.name}</option>`).join('');
+  $('office').innerHTML=OFFICES.map(o=>`<option value="${o.id}">${o.name}</option>`).join('');
+  $('area').value='hsr'; $('office').value='koramangala';
+  const groups=['Purple','Green'].map(line=>`<optgroup label="${line} Line">${STATIONS.filter(s=>s.line===line).map(s=>`<option value="${s.id}">${s.name}</option>`).join('')}</optgroup>`).join('');
+  $('metroFrom').innerHTML=groups; $('metroTo').innerHTML=groups;
+}
+function syncRoute(){
+  const a=AREAS.find(x=>x.id===$('area').value), o=OFFICES.find(x=>x.id===$('office').value);
+  $('km').value=roadKm(a,o);
+  $('metroFrom').value=a.metro; $('metroTo').value=o.metro;
+  updateMetroFare();
+}
+function updateMetroFare(){
+  const rk=railKm($('metroFrom').value,$('metroTo').value);
+  $('metroFare').value=slabFare(rk);
+  $('metroNote').innerHTML=`<b>${stationById($('metroFrom').value)?.name}</b> → <b>${stationById($('metroTo').value)?.name}</b> · ~${rk} km by rail · slab estimate ${fmt(slabFare(rk))} one-way from an unofficial chart — replace with your real fare from the Namma Metro app. Rail distance is approximate, measured along the line; both lines shown are operational (Purple: Whitefield–Challaghatta, Green: Madavara–Silk Institute), changing at Majestic. Metro assumes both ends are near these stations; adjust the picks if not.`;
+}
+function modes(km,roundTrips){
+  const out=[];
+  const ab=+$('autoBase').value||0, ak=+$('autoKm').value||0, at=+$('autoTip').value||0;
+  const aOne=ab+ak*Math.max(0,km-2)+at; const aMin=Math.round(km/(peak?18:24)*60)+4;
+  out.push({id:'auto',name:'Auto',one:aOne,min:aMin,note:`meter ${fmt(ab)} + ${fmt(ak)}/km`});
+  const cb=+$('cabBase').value||0, ck=+$('cabKm').value||0, sg=+$('surge').value||1;
+  const cOne=(cb+ck*km)*sg; const cMin=Math.round(km/(peak?16:22)*60)+6;
+  out.push({id:'cab',name:'Cab (Ola/Uber)',one:cOne,min:cMin,note:`est. ${fmt(cb)} + ${fmt(ck)}/km × ${sg} surge`});
+  const rk=railKm($('metroFrom').value,$('metroTo').value);
+  const mf=+$('metroFare').value||0, lm=+$('lastMile').value||0, lmMin=+$('lastMileMin').value||0;
+  const mOne=mf+2*lm; const mMin=Math.max(10,Math.round(rk/32*60)+6)+12+2*lmMin;
+  out.push({id:'metro',name:'Metro + last-mile',one:mOne,min:mMin,note:`fare ${fmt(mf)} + 2 × ${fmt(lm)} last-mile`});
+  out.forEach(m=>{m.monthly=Math.round(m.one*2*roundTrips); m.hours=Math.round(m.min*2*roundTrips/6)/10});
+  return out;
+}
+function calc(){
+  const km=+$('km').value||0; const days=+$('days').value; const roundTrips=Math.round(days*4.33);
+  $('daysLabel').textContent=days+(days===1?' day':' days');
+  const ms=modes(km,roundTrips);
+  const cheapest=ms.reduce((a,b)=>a.monthly<b.monthly?a:b);
+  const fastest=ms.reduce((a,b)=>a.min<b.min?a:b);
+  $('bestCost').textContent=fmt(cheapest.monthly)+'/mo';
+  $('bestCostSub').textContent=`${cheapest.name} · ${fmt(cheapest.one)} one-way · ${roundTrips} office days/mo`;
+  $('rows').innerHTML=ms.map(m=>`<tr${m===cheapest?' class="best"':''}><td>${m.name}${m===cheapest?'<span class="win">CHEAPEST</span>':''}${m===fastest&&m!==cheapest?'<span class="win">FASTEST</span>':''}<br><span style="color:var(--muted);font-size:12px">${m.note}</span></td><td>${fmt(m.one)}</td><td>${m.min} min</td><td>${fmt(m.monthly)}</td><td>${m.hours} hrs</td></tr>`).join('');
+  const saveVsCab=ms.find(m=>m.id==='cab').monthly-cheapest.monthly;
+  const box=$('verdictBox');
+  const metro=ms.find(m=>m.id==='metro'), auto=ms.find(m=>m.id==='auto');
+  let msg;
+  if(cheapest.id==='metro') msg=`<b>Metro wins on money</b> and holds up in peak traffic: ${fmt(metro.monthly)}/mo, ~${metro.min} min one-way. It costs ${fmt(saveVsCab)} less than cabbing every day. Check that both ends really are near the stations you picked — the last-mile leg is where metro commutes fall apart.`;
+  else if(cheapest.id==='auto') msg=`<b>Auto is cheapest here</b> at ${fmt(auto.monthly)}/mo — short routes favour it. Cab costs ${fmt(saveVsCab)} more for a modest time gain. If rain or peak makes autos scarce, the cab row shows what a fallback costs.`;
+  else msg=`<b>Cab comes out cheapest</b> at ${fmt(cheapest.monthly)}/mo on these settings — unusual; double-check the fare fields against a live app quote before trusting it.`;
+  if(fastest!==cheapest) msg+=` Fastest is ${fastest.name} at ~${fastest.min} min one-way, but ${fmt(fastest.monthly-cheapest.monthly)} more per month.`;
+  box.innerHTML=msg;
+  $('basisBox').innerHTML=`<b>Basis:</b> ${km} km one-way by road · ${days} office days/week = ${roundTrips} round trips/mo · ${peak?'peak':'off-peak'} speeds. Monthly = one-way × 2 × ${roundTrips}.`;
+}
+$('peak').addEventListener('click',()=>{peak=true;$('peak').classList.add('active');$('offpeak').classList.remove('active');calc()});
+$('offpeak').addEventListener('click',()=>{peak=false;$('offpeak').classList.add('active');$('peak').classList.remove('active');calc()});
+['km','days','autoBase','autoKm','autoTip','cabBase','cabKm','surge','metroFare','lastMile','lastMileMin'].forEach(i=>$(i).addEventListener('input',calc));
+['metroFrom','metroTo'].forEach(i=>$(i).addEventListener('change',()=>{updateMetroFare();calc()}));
+['area','office'].forEach(i=>$(i).addEventListener('change',()=>{syncRoute();calc()}));
+fillSelects(); syncRoute(); calc();
+
+</script>
+</body>
+</html>
