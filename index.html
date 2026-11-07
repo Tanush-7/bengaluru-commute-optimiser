@@ -6,7 +6,7 @@
 <meta name="color-scheme" content="light dark">
 <link rel="icon" href="data:,">
 <title>Bengaluru Commute Optimiser — Auto vs Cab vs Metro — tanush.tech</title>
-<meta name="description" content="Compare auto, cab and Namma Metro plus last-mile on cost and time for your exact Bengaluru commute.">
+<meta name="description" content="Compare auto, cab and Namma Metro plus last-mile on monthly cost and time for a Bengaluru commute scenario.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
@@ -44,15 +44,15 @@ label{font-size:13px;font-weight:700;display:block;margin:16px 0 7px}select,inpu
 <body>
 <div class="wrap">
   <div class="eyebrow">tanush.tech · Bengaluru renting tools</div>
-  <h1>Auto, cab or metro — <span>for your exact route.</span></h1>
+  <h1>Auto, cab or metro — <span>price the trip.</span></h1>
   <p class="sub">Pick where you live and where you work. Compares auto, cab and Namma Metro plus last-mile on monthly cost and hours, at peak and off-peak.</p>
-  <div class="badgesRow"><span class="badge">Estimates from typical speeds and official/editable fares — not live traffic or live cab quotes</span><span class="badge">Entries stay in this browser tab — nothing is uploaded</span></div>
+  <div class="badgesRow"><span class="badge">Scenario estimates from typical speeds and editable fares — not live traffic or live cab quotes</span><span class="badge">Metro row is comparable only after you set stations and last-mile that match your ends</span><span class="badge">Entries stay in this browser tab — nothing is uploaded</span></div>
 
   <div class="grid">
     <div>
       <div class="card">
         <h2>Your route</h2>
-        <p class="help">Distance auto-fills from the area pair (straight-line × 1.35 for road). Replace it with the real distance from your map app for an exact answer.</p>
+        <p class="help">Distance auto-fills from the area pair (straight-line × 1.35 for road). Replace it with the real distance from your map app for the closest answer.</p>
         <div class="row2">
           <div>
             <label for="area">I travel from</label>
@@ -91,7 +91,7 @@ label{font-size:13px;font-weight:700;display:block;margin:16px 0 7px}select,inpu
           <div><label for="cabKm">Cab ₹/km</label><input type="number" id="cabKm" value="18" min="0"></div>
           <div><label for="surge">Surge multiplier</label><select id="surge"><option value="1" selected>1.0× normal</option><option value="1.25">1.25× busy</option><option value="1.5">1.5× peak/rain</option></select></div>
         </div>
-        <label for="metroFrom">Metro: from station</label>
+        <label for="metroFrom">Metro scenario: from station — pick stations that actually serve your ends</label>
         <select id="metroFrom"></select>
         <label for="metroTo">to station</label>
         <select id="metroTo"></select>
@@ -106,7 +106,7 @@ label{font-size:13px;font-weight:700;display:block;margin:16px 0 7px}select,inpu
 
     <div class="verdict">
       <div class="verdictTop">
-        <small>Cheapest monthly commute on this route</small>
+        <small>Cheapest in this scenario (estimate)</small>
         <div class="big" id="bestCost">—</div>
         <div class="bigSub" id="bestCostSub">—</div>
       </div>
@@ -241,9 +241,9 @@ function calc(){
   const box=$('verdictBox');
   const metro=ms.find(m=>m.id==='metro'), auto=ms.find(m=>m.id==='auto');
   let msg;
-  if(cheapest.id==='metro') msg=`<b>Metro wins on money</b> and holds up in peak traffic: ${fmt(metro.monthly)}/mo, ~${metro.min} min one-way. It costs ${fmt(saveVsCab)} less than cabbing every day. Check that both ends really are near the stations you picked — the last-mile leg is where metro commutes fall apart.`;
-  else if(cheapest.id==='auto') msg=`<b>Auto is cheapest here</b> at ${fmt(auto.monthly)}/mo — short routes favour it. Cab costs ${fmt(saveVsCab)} more for a modest time gain. If rain or peak makes autos scarce, the cab row shows what a fallback costs.`;
-  else msg=`<b>Cab comes out cheapest</b> at ${fmt(cheapest.monthly)}/mo on these settings — unusual; double-check the fare fields against a live app quote before trusting it.`;
+  if(cheapest.id==='metro') msg=`<b>Metro wins on money in this scenario</b> and holds up in peak traffic: ${fmt(metro.monthly)}/mo, ~${metro.min} min one-way. It costs ${fmt(saveVsCab)} less than cabbing every day. Check that both ends really are near the stations you picked — the last-mile leg is where metro commutes fall apart.`;
+  else if(cheapest.id==='auto'){const cabM=ms.find(m=>m.id==='cab');const dMin=cabM.min-auto.min;msg=`<b>Auto is cheapest in this scenario</b> at ${fmt(auto.monthly)}/mo — short routes favour it. Cab costs ${fmt(saveVsCab)} more ${dMin>0?`and saves ~${dMin} min each way`:'and is not faster on these speeds ('+cabM.min+' vs '+auto.min+' min)'}. If rain or peak makes autos scarce, the cab row shows what a fallback costs.`;}
+  else msg=`<b>Cab comes out cheapest in this scenario</b> at ${fmt(cheapest.monthly)}/mo on these settings — unusual; double-check the fare fields against a live app quote before trusting it.`;
   if(fastest!==cheapest) msg+=` Fastest is ${fastest.name} at ~${fastest.min} min one-way, but ${fmt(fastest.monthly-cheapest.monthly)} more per month.`;
   box.innerHTML=msg;
   $('basisBox').innerHTML=`<b>Basis:</b> ${km} km one-way by road · ${days} office days/week = ${roundTrips} round trips/mo · ${peak?'peak':'off-peak'} speeds. Monthly = one-way × 2 × ${roundTrips}.`;
