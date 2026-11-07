@@ -242,7 +242,7 @@ function calc(){
   const metro=ms.find(m=>m.id==='metro'), auto=ms.find(m=>m.id==='auto');
   let msg;
   if(cheapest.id==='metro') msg=`<b>Metro wins on money in this scenario</b> and holds up in peak traffic: ${fmt(metro.monthly)}/mo, ~${metro.min} min one-way. It costs ${fmt(saveVsCab)} less than cabbing every day. Check that both ends really are near the stations you picked — the last-mile leg is where metro commutes fall apart.`;
-  else if(cheapest.id==='auto'){const cabM=ms.find(m=>m.id==='cab');const dMin=cabM.min-auto.min;msg=`<b>Auto is cheapest in this scenario</b> at ${fmt(auto.monthly)}/mo — short routes favour it. Cab costs ${fmt(saveVsCab)} more ${dMin>0?`and saves ~${dMin} min each way`:'and is not faster on these speeds ('+cabM.min+' vs '+auto.min+' min)'}. If rain or peak makes autos scarce, the cab row shows what a fallback costs.`;}
+  else if(cheapest.id==='auto'){const cabM=ms.find(m=>m.id==='cab');const dMin=auto.min-cabM.min;msg=`<b>Auto is cheapest in this scenario</b> at ${fmt(auto.monthly)}/mo — short routes favour it. Cab costs ${fmt(saveVsCab)} more ${dMin>0?`and saves ~${dMin} min each way`:'and is not faster on these speeds ('+cabM.min+' vs '+auto.min+' min each way)'}. If rain or peak makes autos scarce, the cab row shows what a fallback costs.`;}
   else msg=`<b>Cab comes out cheapest in this scenario</b> at ${fmt(cheapest.monthly)}/mo on these settings — unusual; double-check the fare fields against a live app quote before trusting it.`;
   if(fastest!==cheapest) msg+=` Fastest is ${fastest.name} at ~${fastest.min} min one-way, but ${fmt(fastest.monthly-cheapest.monthly)} more per month.`;
   box.innerHTML=msg;
